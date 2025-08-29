@@ -19,22 +19,22 @@ export class UserController {
     return this.userService.create(user);
   }
 
-  @Get()
+  @Get('find')
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get()
+  @Get(':id') //vai achar o usuário pelo número do id, tipo 'users/1'
   findOne(@Param('id') id: number) {
     return this.userService.findOne(id);
   }
 
-  @Put()
+  @Put('update/:id')
   update(@Param('id') id: number, @Body() data: Partial<User>) {
     return this.userService.update(id, data);
   }
 
-  @Delete()
+  @Delete('delte/:id')
   delete(@Param('id') id: number) {
     return this.userService.delete(id);
   }
