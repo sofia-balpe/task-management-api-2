@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -10,9 +11,15 @@ export class UserService {
     private userRepo: Repository<User>, //objeto da entity User
   ) {}
 
-  create(user: Partial<User>) {
+  create(user: Partial<User> & { password?: string }) {
     //O partial indica que os atributos se tornam opcionais
-    return this.userRepo.save(user);
+    if (user.password) {
+      return bcrypt.hash(user.password, 10).then((hashedPassword) => {
+        const newUser = { ...user, password: hashedPassword };
+
+        return this.userRepo.save(newUser);
+      });
+    }
   }
 
   findAll() {
