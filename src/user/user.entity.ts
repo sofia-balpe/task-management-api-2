@@ -17,4 +17,7 @@ export class User {
   @Column({ nullable: true })
   @IsNumber()
   age: number;
+
+  @Column({ nullable: true })
+  password: string;
 }

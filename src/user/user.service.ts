@@ -11,7 +11,7 @@ export class UserService {
     private userRepo: Repository<User>, //objeto da entity User
   ) {}
 
-  create(user: Partial<User> & { password?: string }) {
+  create(user: Partial<User>) {
     //O partial indica que os atributos se tornam opcionais
     if (user.password) {
       return bcrypt.hash(user.password, 10).then((hashedPassword) => {
@@ -20,7 +20,8 @@ export class UserService {
         return this.userRepo.save(newUser);
       });
     }
-  }
+    //return this.userRepo.save(user); //Se a senha não for inserida, não vai ter o processo de hasher
+  } //garantindo que o registro seja salvo mesmo sem senha
 
   findAll() {
     return this.userRepo.find();
