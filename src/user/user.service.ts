@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -11,28 +17,39 @@ export class UserService {
     private userRepo: Repository<User>, //objeto da entity User
   ) {}
 
-  create(user: Partial<User>) {
-    //O partial indica que os atributos se tornam opcionais
-    if (user.password) {
-      return bcrypt.hash(user.password, 10).then((hashedPassword) => {
-        const newUser = { ...user, password: hashedPassword };
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const exists = await this.userRepo.findOneBy({
+      email: createUserDto.email,
+    });
 
-        return this.userRepo.save(newUser);
-      });
+    if (exists) {
+      throw new ConflictException('Usuário já cadastrado');
     }
-    //return this.userRepo.save(user); //Se a senha não for inserida, não vai ter o processo de hasher
-  } //garantindo que o registro seja salvo mesmo sem senha
 
-  findAll() {
+    const hashed = await bcrypt.hash(createUserDto.password, 10);
+    const user = this.userRepo.create({ ...createUserDto, password: hashed });
+    return this.userRepo.save(user);
+  }
+
+  async findAll(): Promise<User[]> {
     return this.userRepo.find();
   }
 
-  findOne(id: number) {
-    return this.userRepo.findOneBy({ id });
+  async findOne(id: number): Promise<User> {
+    const user = await this.userRepo.findOneBy({ id });
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+    return user;
   }
 
-  update(id: number, data: Partial<User>) {
-    return this.userRepo.update(id, data);
+  async update(id: number, dto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id);
+
+    if (dto.password) {
+      dto.password = await bcrypt.hash(dto.password, 10);
+    }
+
+    Object.assign(user, dto);
+    return this.userRepo.save(user);
   }
 
   delete(id: number) {
