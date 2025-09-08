@@ -16,8 +16,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('login') //o 'login' define a rota, ent vai ser /users/login
+  @Post('register') //o 'login' define a rota, ent vai ser /users/login
   async create(@Body() createUserDto: CreateUserDto) {
+    console.log('DTO recebido no controller:', createUserDto);
     const user = await this.userService.create(createUserDto);
     const { ...result } = user;
     return result;
@@ -49,7 +50,7 @@ export class UserController {
     return result;
   }
 
-  @Delete('delte/:id')
+  @Delete('delete/:id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.userService.remove(id);
     return { message: 'Usuário removido' };
