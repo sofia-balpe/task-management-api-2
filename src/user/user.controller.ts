@@ -52,6 +52,7 @@ export class UserController {
 
   @Delete('delete/:id')
   async remove(@Param('id', ParseIntPipe) id: number) {
+    //ParseIntPipe é usado para converter o id para number, pois ele chega como string
     await this.userService.remove(id);
     return { message: 'Usuário removido' };
   }
