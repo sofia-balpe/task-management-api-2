@@ -52,7 +52,8 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  delete(id: number) {
-    return this.userRepo.delete(id);
+  async remove(id: number): Promise<void> {
+    const user = await this.findOne(id);
+    await this.userRepo.delete(user);
   }
 }

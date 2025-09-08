@@ -8,7 +8,7 @@ import { UserModule } from './user/user.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'mysql',
+      host: 'localhost',
       port: 3306,
       username: 'root',
       password: 'servidor01',

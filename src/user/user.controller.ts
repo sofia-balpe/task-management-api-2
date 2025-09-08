@@ -4,13 +4,11 @@ import {
   Post,
   Get,
   Param,
-  Put,
   Delete,
   ParseIntPipe,
   Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -21,20 +19,23 @@ export class UserController {
   @Post('login') //o 'login' define a rota, ent vai ser /users/login
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.create(createUserDto);
-    const { password, ...result } = user;
+    const { ...result } = user;
     return result;
   }
 
   @Get('find')
   async findAll() {
     const users = await this.userService.findAll();
-    return users.map(({ password, ...u }) => u);
+    return users.map((user) => {
+      const { ...result } = user;
+      return result;
+    });
   }
 
   @Get(':id') //vai achar o usuário pelo número do id, tipo 'users/1'
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const user = await this.userService.findOne(id);
-    const { password, ...result } = user;
+    const { ...result } = user;
     return result;
   }
 
@@ -44,7 +45,7 @@ export class UserController {
     @Body() dto: UpdateUserDto,
   ) {
     const user = await this.userService.update(id, dto);
-    const { password, ...result } = this.userService;
+    const { ...result } = user;
     return result;
   }
 
