@@ -18,36 +18,25 @@ export class UserController {
 
   @Post('register') //o 'login' define a rota, ent vai ser /users/login
   async create(@Body() createUserDto: CreateUserDto) {
-    console.log('DTO recebido no controller:', createUserDto);
-    const user = await this.userService.create(createUserDto);
-    const { ...result } = user;
-    return result;
+    return await this.userService.create(createUserDto);
   }
 
   @Get('find')
   async findAll() {
-    const users = await this.userService.findAll();
-    return users.map((user) => {
-      const { ...result } = user;
-      return result;
-    });
+    return await this.userService.findAll();
   }
 
   @Get(':id') //vai achar o usuário pelo número do id, tipo 'users/1'
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.userService.findOne(id);
-    const { ...result } = user;
-    return result;
+    return await this.userService.findOne(id);
   }
 
   @Patch('update/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateUserDto,
+    @Body() data: UpdateUserDto,
   ) {
-    const user = await this.userService.update(id, dto);
-    const { ...result } = user;
-    return result;
+    return await this.userService.update(id, data);
   }
 
   @Delete('delete/:id')

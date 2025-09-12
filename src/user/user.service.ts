@@ -49,8 +49,7 @@ export class UserService {
       dto.password = await bcrypt.hash(dto.password, 10);
     }
 
-    Object.assign(user, dto);
-    return this.userRepo.save(user);
+    return this.userRepo.save({ ...user, ...dto });
   }
 
   async remove(id: number): Promise<void> {
