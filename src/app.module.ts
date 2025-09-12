@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { FunctionModule } from './function/funcao.module';
+import { FuncaoModule } from './funcao/funcao.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { FunctionModule } from './function/funcao.module';
       synchronize: true, //Vai criar as tabelas de forma automática
     }),
     UserModule,
-    FunctionModule,
+    FuncaoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

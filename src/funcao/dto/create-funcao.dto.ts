@@ -1,6 +1,6 @@
 import { IsString, MaxLength } from 'class-validator';
 
-export class CreateFunctionDto {
+export class CreateFuncaoDto {
   @IsString()
   @MaxLength(100)
   nome: string;
