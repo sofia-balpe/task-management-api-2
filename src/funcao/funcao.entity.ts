@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { User } from 'src/user/user.entity';
 
 @Entity('Funcao')
 export class Funcao {
@@ -11,4 +12,7 @@ export class Funcao {
 
   @Column()
   description: string;
+
+  @OneToMany(() => User, (user) => user.funcao)
+  users: User[];
 }

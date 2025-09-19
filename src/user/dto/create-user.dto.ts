@@ -1,22 +1,30 @@
-import { IsEmail, IsNotEmpty, IsNumber } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
+/* eslint-disable prettier/prettier */
+import {
+  IsString,
+  MaxLength,
+  IsEmail,
+  IsOptional,
+  IsInt,
+  Min,
+  MinLength,
+} from 'class-validator';
 export class CreateUserDto {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  @IsNotEmpty()
+  @IsString()
+  @MaxLength(100)
   name: string;
 
-  @Column()
   @IsEmail()
   email: string;
 
-  @Column({ nullable: true })
-  @IsNumber()
-  age: number;
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  age?: number;
 
-  @Column({ nullable: true })
+  @IsString()
+  @MinLength(6, { message: 'A senha precisa ter ao menos 6 caracteres' })
   password: string;
+
+  @IsInt()
+  idFuncao: number;
 }

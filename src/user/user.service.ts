@@ -9,12 +9,15 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Funcao } from 'src/funcao/funcao.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>, //objeto da entity User
+    @InjectRepository(Funcao)
+    private funcaoRepo: Repository<Funcao>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -28,8 +31,28 @@ export class UserService {
 
     const hashed = await bcrypt.hash(createUserDto.password, 10);
 
-    const user = this.userRepo.create({ ...createUserDto, password: hashed });
+    //Procurar o id Da Função
+    const funcao = await this.funcaoRepo.findOne({
+      where: { id: createUserDto.idFuncao },
+    });
 
+    //Se o Id Da Função não existir:
+    if (!funcao) {
+      throw new NotFoundException(
+        `Função com id ${createUserDto.idFuncao} não encontrada`,
+      );
+    }
+
+    //Cria o objeto do user junto com o id da função:
+    const user = this.userRepo.create({
+      name: createUserDto.name,
+      email: createUserDto.email,
+      age: createUserDto.age,
+      password: hashed,
+      funcao,
+    });
+
+    //salva:
     return this.userRepo.save(user);
   }
 

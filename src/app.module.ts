@@ -17,7 +17,8 @@ import { FuncaoModule } from './funcao/funcao.module';
       password: 'servidor01',
       database: 'task_management_api2',
       entities: [User, Funcao],
-      //synchronize: true, //Vai criar as tabelas de forma automática
+      synchronize: false, //Vai criar as tabelas de forma automática
+      autoLoadEntities: true,
     }),
     UserModule,
     FuncaoModule,
