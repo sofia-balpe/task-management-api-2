@@ -16,7 +16,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register') //o 'login' define a rota, ent vai ser /users/login
+  @Post('register')
   async create(@Body() data: CreateUserDto) {
     return await this.userService.create(data);
   }
