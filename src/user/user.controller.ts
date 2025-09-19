@@ -17,8 +17,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('register') //o 'login' define a rota, ent vai ser /users/login
-  async create(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+  async create(@Body() data: CreateUserDto) {
+    return await this.userService.create(data);
   }
 
   @Get('find')

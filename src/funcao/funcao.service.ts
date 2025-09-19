@@ -57,9 +57,9 @@ export class FuncaoService {
   //##################Delete###############
   async remove(id: number): Promise<void> {
     const funcao = await this.findOne(id);
+    await this.funcaoRepo.delete(funcao);
     if (funcao == null) {
       throw new NotFoundException('Funcao não encontrada');
     }
-    await this.funcaoRepo.delete(funcao);
   }
 }

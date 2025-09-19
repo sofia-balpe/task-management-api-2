@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { DataSource } from 'typeorm';
 import { User } from './src/user/user.entity';
 import { Funcao } from './src/funcao/funcao.entity';
